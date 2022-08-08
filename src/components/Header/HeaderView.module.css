@@ -1,0 +1,9 @@
+.Header {
+    left: 0px;
+    padding-top: 2vmin;
+    min-width: 100vmin;
+    min-height: 8vmin;
+    background: #FCFCFC 0% 0% no-repeat padding-box;
+    border: 1px solid #EBEDF2;
+    opacity: 1;
+}

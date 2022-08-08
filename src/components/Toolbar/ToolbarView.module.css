@@ -1,0 +1,11 @@
+.Toolbar {
+    vertical-align: bottom;
+    display: inline-block;
+    z-index: 1;
+    left: 0px;
+    min-width: 8vmin;
+    min-height: 88vmin;
+    background: #FCFCFC 0% 0% no-repeat padding-box;
+    border: 1px solid #EBEDF2;
+    opacity: 1;
+}

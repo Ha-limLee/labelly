@@ -1,0 +1,32 @@
+.Default {
+    display: block;
+    margin-top: 1vmin;
+    margin-left: 0.2vmin;
+    border: 0;
+    border-radius: 10px;
+    min-width: 8vmin;
+    min-height: 8vmin;
+
+    background: transparent url('./Bounding_Box_Create.png') 0% 0% no-repeat padding-box;
+    background-size: cover;
+    opacity: 1;
+}
+
+.Default:hover {
+    background-color: rgb(213, 217, 226);
+}
+
+.CreateMode {
+    display: block;
+    margin-top: 1vmin;
+    margin-left: 0.2vmin;
+    border: 0;
+    border-radius: 10px;
+    min-width: 8vmin;
+    min-height: 8vmin;
+
+    background: transparent url('./Bounding_Box_Create.png') 0% 0% no-repeat padding-box;
+    background-size: cover;
+    opacity: 1;
+    background-color: rgb(213, 217, 226);
+}
