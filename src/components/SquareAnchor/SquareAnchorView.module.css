@@ -1,0 +1,9 @@
+.SquareAnchor {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 3px solid var(--unnamed-color-5668d9);
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 3px solid #5668D9;
+    opacity: 1;
+}

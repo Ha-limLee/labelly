@@ -1,7 +1,7 @@
 import React from 'react';
 import LabelPosition from './LabelPosition.type';
 import styles from './LabelView.module.css';
-
+import SquareAnchor from 'components/SquareAnchor';
 
 const LabelView = ({labelPosition, selected, onClick}: {labelPosition: LabelPosition, selected: boolean, onClick: React.MouseEventHandler}) => {
     const {left, top, width, height} = labelPosition;
@@ -11,14 +11,13 @@ const LabelView = ({labelPosition, selected, onClick}: {labelPosition: LabelPosi
         width: width,
         height: height,
     };
-    if (selected) {
-        style = {
-            ...style,
-            border: '1px solid red'
-        };
-    }
     return (
-        <div className={styles.LabelView} style={style} onClick={onClick}></div>
+        selected ?
+        (<>
+        <SquareAnchor left={left} top={top}/> <SquareAnchor left={left + width} top={top}/>
+        <SquareAnchor left={left} top={top + height}/> <SquareAnchor left={left + width} top={top + height}/>
+        <div className={styles.LabelView} style={style} onClick={onClick}/></>) :
+        <div className={styles.LabelView} style={style} onClick={onClick}/>
     );
 };
 
