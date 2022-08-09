@@ -1,5 +1,6 @@
 import React from 'react';
 import Label from 'components/Label';
+import { SelectedIdState } from './SelectedIdContext';
 
 type LabelListState = {
     [id: number] : JSX.Element;
@@ -7,7 +8,7 @@ type LabelListState = {
 
 type LabelListAction =
 | { type: 'add', id:number, element: React.FunctionComponentElement<typeof Label> }
-| { type: 'removeAll', ids: number[] }
+| { type: 'removeAll', ids: SelectedIdState }
 
 const reducer = (state: LabelListState, action: LabelListAction) => {
     switch (action.type) {
@@ -18,8 +19,11 @@ const reducer = (state: LabelListState, action: LabelListAction) => {
             };
         case 'removeAll':
             const ret = {...state};
-            for (let id of action.ids)
-                delete ret[id];
+            for (const id in action.ids) {
+                if (action.ids[id]) {
+                    delete ret[id];
+                }
+            }
             return ret;
         default:
             return state;

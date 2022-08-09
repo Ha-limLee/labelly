@@ -7,22 +7,23 @@ type SelectedIdState = {
     [id: number]: boolean
 };
 type SelectedIdAction =
-| { type: 'toggle', id: number }
+| { type: 'set', id: number, selected: boolean}
+| { type: 'removeAll', ids: number[] }
 
 const reducer = (state: SelectedIdState, action: SelectedIdAction) => {
+    console.log(state);
     switch (action.type) {
-        case 'toggle':
-            if (state[action.id]) {
-                delete state[action.id];
-                return {
-                    ...state
-                };
-            } else {
-                return {
-                    ...state,
-                    [action.id]: true
-                }
-            }
+        case 'set':
+            state[action.id] = action.selected;
+            return {
+                ...state
+            };
+        case 'removeAll':
+            for (const id of action.ids)
+                delete state[id];
+            return {
+                ...state
+            };
         default:
             return state;
     }
@@ -33,7 +34,12 @@ const SelectedIdStateContext = React.createContext<SelectedIdState | null>(null)
 const SelectedIdDispatchContext = React.createContext<SelectedIdDispatch | null>(null);
 
 const SelectedIdProvider = ({children}: {children: React.ReactNode}) => {
-    const [state, dispatch] = React.useReducer<typeof reducer>(reducer, {});
+    const [state, dispatch] = React.useReducer<typeof reducer>(reducer, {})
+    /**
+    const callback = React.useCallback((action: SelectedIdAction) => {
+        dispatch(action);
+    }, [state]);
+     */
     return (
         <SelectedIdStateContext.Provider value={state}>
             <SelectedIdDispatchContext.Provider value={dispatch}>
@@ -56,3 +62,4 @@ const useSelectedIdDispatch = () => {
 };
 
 export { SelectedIdProvider, useSelectedIdState, useSelectedIdDispatch };
+export type { SelectedIdState };

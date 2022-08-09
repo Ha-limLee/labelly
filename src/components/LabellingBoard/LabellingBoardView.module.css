@@ -4,4 +4,5 @@
     display: inline-block;
     min-width: 92vmax;
     min-height: 88vmin;
+    outline: 0;
 }

@@ -1,10 +1,28 @@
 import React from "react";
 import LabelPosition from "./LabelPosition.type";
 import LabelView from "./LabelView";
+import { useSelectedIdDispatch, useSelectedIdState } from "contexts/SelectedIdContext";
+import { LABEL_MODE, useModeState } from "contexts/LabelModeContext";
 
-const Label = ({labelPosition, onClick}: {labelPosition: LabelPosition, onClick: React.MouseEventHandler}) => {
+const Label = ({id, labelPosition}: {id: number, labelPosition: LabelPosition}) => {
+    const selectedIdDispatch = useSelectedIdDispatch();
+    const selectedIds = useSelectedIdState();
+    const selected = selectedIds[id];
+    const mode = useModeState()();
+    
+    const onClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (mode === LABEL_MODE.SELECT) {
+            if (selectedIds[id])
+                selectedIdDispatch({type: 'set', id: id, selected: false});
+            else {
+                selectedIdDispatch({type: 'set', id: id, selected: true});
+            }
+        }
+    };
+
     return (
-        <LabelView labelPosition={labelPosition} onClick={onClick}></LabelView>
+        <LabelView labelPosition={labelPosition} selected={selected} onClick={onClick}></LabelView>
     );
 };
 

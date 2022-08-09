@@ -3,17 +3,26 @@ import React from 'react';
 import Label from "components/Label";
 import { useModeState, LABEL_MODE } from "contexts/LabelModeContext";
 import { useLabelListState, useLabelListDispatch } from "contexts/LabelListContext";
-import { useSelectedIdDispatch } from "contexts/SelectedIdContext";
+import { useSelectedIdState, useSelectedIdDispatch } from "contexts/SelectedIdContext";
 
 const LabellingBoard = () => {
-    const {mode} = useModeState();
+    const getMode = useModeState();
+    const mode = getMode();
     const [begin, setBegin] = React.useState([0, 0]);
     const labels = useLabelListState();
     const labelsDispatch = useLabelListDispatch();
     const [mouseDown, setMouseDown] = React.useState(false);
     const [mouseDragging, setMouseDragging] = React.useState(false);
     const [key, setKey] = React.useState(0);
+    const selectedId = useSelectedIdState();
     const selectedIdDispatch = useSelectedIdDispatch();
+
+    const onKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+            labelsDispatch({type: 'removeAll', ids: selectedId});
+            selectedIdDispatch({type: 'removeAll', ids: Object.keys(selectedId).map(parseInt)});
+        }
+    };
 
     const onMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -42,10 +51,7 @@ const LabellingBoard = () => {
             height: `${height}px`
         };
         const newLabel = <Label key={key}
-                                onClick={(e: React.MouseEvent) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    selectedIdDispatch({type: 'toggle', id: key});}}
+                                id={key}
                                 labelPosition={labelPosition} />
         labelsDispatch({type: 'add', id: key, element: newLabel});
         setKey(key + 1);
@@ -54,9 +60,10 @@ const LabellingBoard = () => {
     };
     const createEvents = () => {
         return {
-            onMouseDown: (mode == LABEL_MODE.CREATE) ? onMouseDown : (e: React.MouseEvent) => { },
-            onMouseMove: (mode == LABEL_MODE.CREATE) ? onMouseMove : (e: React.MouseEvent) => { },
-            onMouseUp: (mode == LABEL_MODE.CREATE) ? onMouseUp : (e: React.MouseEvent) => { }
+            onMouseDown: (mode === LABEL_MODE.CREATE) ? onMouseDown : (e: React.MouseEvent) => { },
+            onMouseMove: (mode === LABEL_MODE.CREATE) ? onMouseMove : (e: React.MouseEvent) => { },
+            onMouseUp: (mode === LABEL_MODE.CREATE) ? onMouseUp : (e: React.MouseEvent) => { },
+            onKeyDown: (mode === LABEL_MODE.SELECT) ? onKeyDown : (e: React.KeyboardEvent) => { },
         };
     };
     const children = Object.keys(labels).map(key => labels[parseInt(key)]);

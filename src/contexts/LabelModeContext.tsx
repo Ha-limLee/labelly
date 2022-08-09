@@ -6,18 +6,18 @@ const LABEL_MODE = {
   } as const;
 type LABEL_MODE = typeof LABEL_MODE[keyof typeof LABEL_MODE];
 
-type ModeState = {
-    mode: LABEL_MODE;
-};
+type ModeState = () => LABEL_MODE;
 
-type ModeAction = {type: 'toggle', mode: LABEL_MODE}
+type ModeAction =
+| {type: 'toggle', mode: LABEL_MODE}
+| {type: 'get'}
 
 const reducer = (state: ModeState, action: ModeAction) => {
     switch (action.type) {
         case 'toggle':
-            return {
-                mode: action.mode
-            };
+            return () => action.mode;
+        case 'get':
+            return state;
         default:
             return state;
     }
@@ -28,7 +28,7 @@ const ModeStateContext = React.createContext<ModeState | null>(null);
 const ModeDispatchContext = React.createContext<ModeDispatch | null>(null);
 
 const ModeProvider = ({children}: {children: React.ReactNode}) => {
-    const [state, dispatch] = React.useReducer<typeof reducer>(reducer, {mode: LABEL_MODE.SELECT});
+    const [state, dispatch] = React.useReducer<typeof reducer>(reducer, () => LABEL_MODE.SELECT);
     return (
         <ModeStateContext.Provider value={state}>
             <ModeDispatchContext.Provider value={dispatch}>
