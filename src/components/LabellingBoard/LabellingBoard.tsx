@@ -45,10 +45,10 @@ const LabellingBoard = () => {
         const width = Math.abs(e.pageX - begin[0]);
         const height = Math.abs(e.pageY - begin[1]);
         const labelPosition = {
-            left: `${left}px`,
-            top: `${top}px`,
-            width: `${width}px`,
-            height: `${height}px`
+            left: left,
+            top: top,
+            width: width,
+            height: height
         };
         const newLabel = <Label key={key}
                                 id={key}

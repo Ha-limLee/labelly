@@ -1,8 +1,8 @@
 type LabelPosition = {
-    left: string,
-    top: string,
-    width: string,
-    height: string
+    left: number,
+    top: number,
+    width: number,
+    height: number
 };
 
 export default LabelPosition;

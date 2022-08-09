@@ -1,6 +1,6 @@
 import SquareAnchorView from "./SquareAnchorView";
 
-const SquareAnchor = ({left, top}: {left: string, top: string}) => {
+const SquareAnchor = ({left, top}: {left: number, top: number}) => {
     return (
         <SquareAnchorView left={left} top={top}/>
     );
