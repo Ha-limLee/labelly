@@ -1,9 +1,10 @@
 import React from "react";
+import LabelPosition from "./LabelPosition.type";
 import LabelView from "./LabelView";
 
-const Label = ({left, top, width, height, onClick}: {left: string, top: string, width: string, height: string, onClick: React.MouseEventHandler}) => {
+const Label = ({labelPosition, onClick}: {labelPosition: LabelPosition, onClick: React.MouseEventHandler}) => {
     return (
-        <LabelView left={left} top={top} width={width} height={height} onClick={onClick}></LabelView>
+        <LabelView labelPosition={labelPosition} onClick={onClick}></LabelView>
     );
 };
 

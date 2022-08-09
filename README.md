@@ -2,6 +2,26 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## How to start this project
+You need [Node.js 16 LTS](https://nodejs.org/en/).
+
+If you installed Node.js, download yarn package manager.
+> npm install --global yarn
+
+Clone this repo.
+> git clone https://github.com/Ha-limLee/labelly
+
+Change working directory into the cloned directory.
+> cd labelly
+
+Install the project dependencies.
+> yarn install
+
+Now run CRA dev mode.
+> yarn start
+
+You'll see browser pops up.
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -30,12 +50,12 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 
-### To do
-highlight selected labels
-remove selected labels when delete or backspace key pressed
+### `To do`
+highlight selected labels\
+remove selected labels when delete or backspace key pressed\
 drag & drop label
 
-[ Optional ]
-resize label
-rotate label
+[ Optional ]\
+resize label\
+rotate label\
 test components
