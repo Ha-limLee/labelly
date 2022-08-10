@@ -6,6 +6,11 @@ import { useLabelListState, useLabelListDispatch, LabelListElement } from "conte
 import { useSelectedIdState, useSelectedIdDispatch } from "contexts/SelectedIdContext";
 
 const LabellingBoard = () => {
+    const [imageUrl, setImageUrl] = React.useState('');
+    fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
+        .then(res => res.json())
+        .then(json => setImageUrl(json[6].url));
+
     const getMode = useModeState();
     const mode = getMode();
     const [begin, setBegin] = React.useState([0, 0]);
@@ -92,7 +97,7 @@ const LabellingBoard = () => {
     };
     const children = Object.keys(labelList).map(key => labelList[parseInt(key)].label);
     return (
-        <LabellingBoardView {...createEvents()}>
+        <LabellingBoardView {...createEvents()} imageUrl={imageUrl}>
             {children}
         </LabellingBoardView>
     );
