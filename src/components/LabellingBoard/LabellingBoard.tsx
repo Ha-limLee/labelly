@@ -60,22 +60,23 @@ const LabellingBoard = () => {
         },
         onMouseUp : (e: React.MouseEvent) => {
             e.preventDefault();
-            if (!mouseDown || !mouseDragging) return;
-            const left = Math.min(e.pageX, begin[0]);
-            const top = Math.min(e.pageY, begin[1]);
-            const width = Math.abs(e.pageX - begin[0]);
-            const height = Math.abs(e.pageY - begin[1]);
+            if (mouseDown && mouseDragging) {
+                const left = Math.min(e.pageX, begin[0]);
+                const top = Math.min(e.pageY, begin[1]);
+                const width = Math.abs(e.pageX - begin[0]);
+                const height = Math.abs(e.pageY - begin[1]);
 
-            const element: LabelListElement = {
-                label: <Label key={key} id={key}/>,
-                left: left,
-                top: top,
-                width: width,
-                height: height
-            };
-            labelListDispatch({type: 'add', id: key, element: element});
+                const element: LabelListElement = {
+                    label: <Label key={key} id={key}/>,
+                    left: left,
+                    top: top,
+                    width: width,
+                    height: height
+                };
+                labelListDispatch({type: 'add', id: key, element: element});
 
-            setKey(key + 1);
+                setKey(key + 1);    
+            }
             setMouseDown(false);
             setMouseDragging(false);
         }
