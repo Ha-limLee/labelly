@@ -2,12 +2,22 @@ import React from 'react';
 import Label from 'components/Label';
 import { SelectedIdState } from './SelectedIdContext';
 
+type LabelListElement = {
+    label: React.FunctionComponentElement<typeof Label>,
+    left: number,
+    top: number,
+    width: number,
+    height: number
+};
+
 type LabelListState = {
-    [id: number] : JSX.Element;
+    [id: number] : LabelListElement;
 };
 
 type LabelListAction =
-| { type: 'add', id:number, element: React.FunctionComponentElement<typeof Label> }
+| { type: 'add', id: number, element: LabelListElement}
+| { type: 'move', id: number, left: number, top: number}
+| { type: 'modify', id: number, left: number, top: number, width: number, height: number }
 | { type: 'removeAll', ids: SelectedIdState }
 
 const reducer = (state: LabelListState, action: LabelListAction) => {
@@ -16,6 +26,26 @@ const reducer = (state: LabelListState, action: LabelListAction) => {
             return {
                 ...state,
                 [action.id] : action.element
+            };
+        case 'move':
+            return {
+                ...state,
+                [action.id] : {
+                    ...state[action.id],
+                    left: action.left,
+                    top: action.top
+                }
+            };
+        case 'modify':
+            return {
+                ...state,
+                [action.id] : {
+                    ...state[action.id],
+                    left: action.left,
+                    top: action.top,
+                    width: action.width,
+                    height: action.height
+                }
             };
         case 'removeAll':
             const ret = {...state};
@@ -58,3 +88,4 @@ const useLabelListDispatch = () => {
 };
 
 export { LabelListProvider, useLabelListState, useLabelListDispatch };
+export type { LabelListElement };
