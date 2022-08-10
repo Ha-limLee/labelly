@@ -7,8 +7,8 @@ import LabellingBoard from '../LabellingBoard';
 const AppView = () => {
     return (
         <div className={style.App}>
-            <Header/>
-            <Toolbar/><LabellingBoard/>
+            <Header></Header>
+            <Toolbar></Toolbar> <LabellingBoard></LabellingBoard>
         </div>
     );
 }

@@ -12,6 +12,7 @@ type SelectedIdAction =
 | { type: 'clear' }
 
 const reducer = (state: SelectedIdState, action: SelectedIdAction) => {
+    console.log(state);
     switch (action.type) {
         case 'set':
             state[action.id] = action.selected;
