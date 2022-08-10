@@ -1,5 +1,5 @@
 import React from 'react';
-import LabelPosition from './LabelPosition.type';
+import LabelPosition from '../LabelPosition.type';
 import styles from './DefaultLabelView.module.css';
 
 const toPixel = (num: number) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import LabelPosition from "./LabelPosition.type";
+import LabelPosition from "../LabelPosition.type";
 import SelectedLabelView from "./SelectedLabelView";
 import { useSelectedIdDispatch } from "contexts/SelectedIdContext";
 
