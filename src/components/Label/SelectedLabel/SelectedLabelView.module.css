@@ -1,0 +1,6 @@
+.LabelView {
+    position: absolute;
+    background: var(--unnamed-color-5668d9) 0% 0% no-repeat padding-box;
+    background: #5668D9 0% 0% no-repeat padding-box;
+    opacity: 0.2;
+}
