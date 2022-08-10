@@ -21,12 +21,11 @@ const LabelView = ({labelPosition, mode, selected, onClick}: {labelPosition: Lab
     return (
         (mode === LABEL_MODE.SELECT && selected) ?
         (<>
-            <RoundAnchor left={left + width / 2 - 7} top={top - 40} />
-            <LineAnchor left={left + width / 2 - 1} top={top - 30}/>
-            <SquareAnchor left={left - 6} top={top - 6}/>              <SquareAnchor left={left + width / 2 - 6} top={top - 6}/>           <SquareAnchor left={left + width - 8} top={top - 6}/>
+            <RoundAnchor left={left + width / 2 - 8} top={top - 40} />
+            <LineAnchor left={left + width / 2 - 2} top={top - 30}/>
+            <SquareAnchor left={left - 6} top={top - 6}/>              <SquareAnchor left={left + width / 2 - 7} top={top - 6}/>           <SquareAnchor left={left + width - 8} top={top - 6}/>
             <SquareAnchor left={left - 6} top={top + height / 2 - 6}/> <div className={styles.LabelView} style={style} onClick={onClick}/> <SquareAnchor left={left + width - 8} top={top + height / 2 - 6}/>
-            <SquareAnchor left={left - 6} top={top + height - 8}/>     <SquareAnchor left={left + width / 2 - 6} top={top + height - 8}/>  <SquareAnchor left={left + width - 8} top={top + height - 8}/>
-            
+            <SquareAnchor left={left - 6} top={top + height - 8}/>     <SquareAnchor left={left + width / 2 - 7} top={top + height - 8}/>  <SquareAnchor left={left + width - 8} top={top + height - 8}/>
         </>)
         : <div className={styles.LabelView} style={style} onClick={onClick}/>
     );
