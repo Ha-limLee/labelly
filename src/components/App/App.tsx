@@ -1,4 +1,3 @@
-import React from 'react';
 import AppView from './AppView';
 import { ModeProvider } from 'contexts/LabelModeContext';
 import { LabelListProvider } from 'contexts/LabelListContext';
@@ -9,7 +8,7 @@ const App = () => {
     <ModeProvider>
       <LabelListProvider>
         <SelectedIdProvider>
-          <AppView></AppView>
+          <AppView/>
         </SelectedIdProvider>
       </LabelListProvider>
     </ModeProvider>

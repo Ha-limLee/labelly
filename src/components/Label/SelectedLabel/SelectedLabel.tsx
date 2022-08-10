@@ -50,7 +50,7 @@ const SelectedLabel = ({id, labelPosition}: {id: number, labelPosition: LabelPos
     };
 
     return (
-        <SelectedLabelView labelPosition={pos} onClick={onClick} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}/>
+        <SelectedLabelView id={id} labelPosition={pos} onClick={onClick} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}/>
     );
 };
 
