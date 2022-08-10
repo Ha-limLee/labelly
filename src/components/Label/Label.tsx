@@ -22,7 +22,7 @@ const Label = ({id, labelPosition}: {id: number, labelPosition: LabelPosition}) 
     };
 
     return (
-        <LabelView labelPosition={labelPosition} selected={selected} onClick={onClick}></LabelView>
+        <LabelView labelPosition={labelPosition} mode={mode} selected={selected} onClick={onClick}></LabelView>
     );
 };
 

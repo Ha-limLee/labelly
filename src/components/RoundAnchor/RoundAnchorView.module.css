@@ -1,0 +1,12 @@
+.RoundAnchor {
+    position: absolute;
+    z-index: 1;
+    width: 10px;
+    height: 10px;
+
+    border: 3px solid var(--unnamed-color-5668d9);
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 3px solid #5668D9;
+    opacity: 1;
+    border-radius: 10px;
+}

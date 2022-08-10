@@ -1,0 +1,10 @@
+.LineAnchor {
+    position: absolute;
+    z-index: 0;
+    width: 0px;
+    height: 32px;
+    background: var(--unnamed-color-5668d9) 0% 0% no-repeat padding-box;
+    border: 2px solid var(--unnamed-color-5668d9);
+    background: #5668D9 0% 0% no-repeat padding-box;
+    opacity: 1;
+}

@@ -9,6 +9,7 @@ type SelectedIdState = {
 type SelectedIdAction =
 | { type: 'set', id: number, selected: boolean}
 | { type: 'removeAll', ids: number[] }
+| { type: 'clear' }
 
 const reducer = (state: SelectedIdState, action: SelectedIdAction) => {
     console.log(state);
@@ -24,6 +25,8 @@ const reducer = (state: SelectedIdState, action: SelectedIdAction) => {
             return {
                 ...state
             };
+        case 'clear':
+            return {};
         default:
             return state;
     }
