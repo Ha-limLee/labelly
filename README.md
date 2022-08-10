@@ -1,4 +1,17 @@
-# Getting Started with Create React App
+# Labelly - Make Dataset from Your Image!
+![main](./imgs/main.png)
+
+## What You can do
+1. Draw a label
+![draw](./imgs/draw.png)
+2. Choose labels
+![choose](./imgs/choose.png)
+3. Move a label
+![move](./imgs/move.png)
+4. Delete the selected labels (press backspace or delete key)
+![delete](./imgs/delete.png)
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -48,14 +61,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-
-### `To do`
-highlight selected labels\
-remove selected labels when delete or backspace key pressed\
-drag & drop label
-
-[ Optional ]\
-resize label\
-rotate label\
-test components
