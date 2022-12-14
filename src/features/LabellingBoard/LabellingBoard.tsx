@@ -1,6 +1,6 @@
 import LabellingBoardView from "./LabellingBoardView";
 import React from 'react';
-import Label from "components/Label";
+import Label from "features/Label";
 import { useModeState, LABEL_MODE } from "contexts/LabelModeContext";
 import { useLabelListState, useLabelListDispatch, LabelListElement } from "contexts/LabelListContext";
 import { useSelectedIdState, useSelectedIdDispatch } from "contexts/SelectedIdContext";

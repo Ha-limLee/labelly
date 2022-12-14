@@ -5,13 +5,13 @@ import { SelectedIdProvider } from 'contexts/SelectedIdContext';
 
 const App = () => {
   return (
-    <ModeProvider>
-      <LabelListProvider>
-        <SelectedIdProvider>
+    // <ModeProvider>
+    //   <LabelListProvider>
+    //     <SelectedIdProvider>
           <AppView/>
-        </SelectedIdProvider>
-      </LabelListProvider>
-    </ModeProvider>
+    //     </SelectedIdProvider>
+    //   </LabelListProvider>
+    // </ModeProvider>
   );
 };
 

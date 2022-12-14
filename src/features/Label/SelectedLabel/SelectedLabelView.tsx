@@ -2,8 +2,8 @@ import React from 'react';
 import LabelPosition from '../LabelPosition.type';
 import styles from './SelectedLabelView.module.css';
 
-import { RoundAnchor, SquareAnchor, LineAnchor } from 'components/anchors';
-import { Nanchor, NEanchor, Eanchor, SEanchor, Sanchor, SWanchor, Wanchor, NWanchor } from 'components/anchors';
+import { RoundAnchor, SquareAnchor, LineAnchor } from 'features/anchors';
+import { Nanchor, NEanchor, Eanchor, SEanchor, Sanchor, SWanchor, Wanchor, NWanchor } from 'features/anchors';
 
 const toPixel = (num: number) => {
     return `${num}px`;

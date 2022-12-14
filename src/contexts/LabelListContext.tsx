@@ -1,5 +1,5 @@
 import React from 'react';
-import Label from 'components/Label';
+import Label from 'features/Label';
 import { SelectedIdState } from './SelectedIdContext';
 
 type LabelListElement = {

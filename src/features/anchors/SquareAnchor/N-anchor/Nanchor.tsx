@@ -1,4 +1,4 @@
-import SelectedLabel from "components/Label/SelectedLabel";
+import SelectedLabel from "features/Label/SelectedLabel";
 import { LabelListElement, useLabelListDispatch, useLabelListState } from "contexts/LabelListContext";
 import React from "react";
 import { SquareAnchorWithDrag } from "../common";
