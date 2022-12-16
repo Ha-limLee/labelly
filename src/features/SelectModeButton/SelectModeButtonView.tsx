@@ -1,9 +1,9 @@
 import React from 'react';
 import style from './SelectModeButtonView.module.css';
-import { LABEL_MODE } from 'contexts/LabelModeContext';
+import type { LABEL_MODE } from 'features/mode/modeSlice';
 
 const SelectModeButtonView = ({mode, onClick}: {mode: LABEL_MODE, onClick: React.MouseEventHandler}) => {
-    const whichStyle = (mode === LABEL_MODE.SELECT) ? "SelectMode" : "Default";
+    const whichStyle = (mode === "SELECT") ? "SelectMode" : "Default";
     return (
         <button className={style[whichStyle]} onClick={onClick}>
         </button>

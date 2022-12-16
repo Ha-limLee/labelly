@@ -1,15 +1,13 @@
 import CreateModeButtonView from "./CreateModeButtonView";
-import { useModeState, useModeDispatch, LABEL_MODE } from "contexts/LabelModeContext";
-import { useSelectedIdDispatch } from "contexts/SelectedIdContext";
 import React from "react";
+import { useAppSelector, useAppDispatch } from "app/hooks";
+import { selectMode, set } from "features/mode/modeSlice";
 
 const CreateModeButton = () => {
-    const mode = useModeState()();
-    const modelDispatch = useModeDispatch();
-    const selectedIdDispatch = useSelectedIdDispatch();
+    const mode = useAppSelector(selectMode);
+    const dispatch = useAppDispatch();
     const onClick = (e: React.MouseEvent) => {
-        modelDispatch({type: "toggle", mode: LABEL_MODE.CREATE})
-        selectedIdDispatch({type: 'clear'});
+        dispatch(set("CREATE"));
     };
     return (
         <CreateModeButtonView mode={mode} onClick={onClick}></CreateModeButtonView>

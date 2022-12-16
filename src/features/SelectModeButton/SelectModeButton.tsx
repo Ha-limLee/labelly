@@ -1,11 +1,12 @@
 import SelectModeButtonView from "./SelectModeButtonView";
-import { useModeState, useModeDispatch, LABEL_MODE } from "contexts/LabelModeContext";
+import { selectMode, set } from "features/mode/modeSlice";
+import { useAppSelector, useAppDispatch } from "app/hooks";
 
 const SelectModeButton = () => {
-    const getMode = useModeState();
-    const dispatch = useModeDispatch();
+    const mode = useAppSelector(selectMode);
+    const dispatch = useAppDispatch();
     return (
-        <SelectModeButtonView mode={getMode()} onClick={e => dispatch({type: "toggle", mode: LABEL_MODE.SELECT})}></SelectModeButtonView>
+        <SelectModeButtonView mode={mode} onClick={e => dispatch(set("SELECT"))}></SelectModeButtonView>
     );
 };
 
