@@ -1,62 +1,98 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type {RootState} from '../../app/store';
+import { useKeyGen } from "features/keyGen";
 
-interface LabelPoint {
+export interface LabelPoint {
     left: number,
     top: number,
 }
 
-interface LabelSize {
+export interface LabelSize {
     width: number,
     height: number,
 }
 
-interface LabelSpace extends LabelPoint, LabelSize{
+export interface LabelSpace extends LabelPoint, LabelSize{ }
+
+export interface LabelState extends LabelSpace {
     selected: boolean;
 };
 
 interface LabelGroupState {
-    [id: number] : LabelSpace;
+    [id: number] : LabelState;
 };
 
-const initialState: LabelGroupState = {};
+function createGroup() {
+    const keyGen = useKeyGen();
+    const group: LabelGroupState = {};
+    return {
+        group,
+        addLabel: (item: LabelState) => {
+            group[keyGen.get()] = item;
+        },
+        removeLabel: (id: number) => {
+            delete group[id];
+            keyGen.reuse(id);
+        }
+    };
+}
+
+const initialState = createGroup();
 
 interface LabelGroupAction {
-    add: {id: number, item: LabelSpace};
+    addLabel: { item: LabelState };
+    setLabel: { id: number, item: LabelState };
+    setSpace: { id: number, item: LabelSpace };
     move: {id: number, item: LabelPoint};
-    modify: {id: number, item: LabelSpace};
+    select: { id: number };
+    unselect: { id: number };
     removeSelectedAll: null;
 };
-
-// type LabelListAction =
-// | { type: 'add', id: number, element: LabelListElement}
-// | { type: 'move', id: number, left: number, top: number}
-// | { type: 'modify', id: number, left: number, top: number, width: number, height: number }
-// | { type: 'removeAll', ids: SelectedIdState }
 
 export const labelGroupSlice = createSlice({
     name: "labelGroup",
     initialState,
     reducers: {
-        add: (state, {payload}: PayloadAction<LabelGroupAction["add"]>) => {
-            state[payload.id] = payload.item;
+        addLabel: (state, { payload }: PayloadAction<LabelGroupAction["addLabel"]>) => {
+            state.addLabel(payload.item);
         },
-        move: (state, {payload}: PayloadAction<LabelGroupAction["move"]>) => { 
+        setLabel: ({ group }, { payload }: PayloadAction<LabelGroupAction["setLabel"]>) => {
+            group[payload.id] = payload.item;
+        },
+        setSpace: ({ group }, { payload }: PayloadAction<LabelGroupAction["setSpace"]>) => {
+            const { id, item } = payload;
+            if (group[id]) {
+                group[id] = {
+                    selected: group[id].selected,
+                    ...item,
+                };
+            } else {
+                group[id] = { selected: false, ...item };
+            }
+        },
+        move: ({group}, {payload}: PayloadAction<LabelGroupAction["move"]>) => { 
             const {left, top} = payload.item;
-            const curr = state[payload.id];
-            state[payload.id] = {...curr, left, top};
+            const curr = group[payload.id];
+            group[payload.id] = {...curr, left, top};
         },
-        modify: (state, {payload}: PayloadAction<LabelGroupAction["modify"]>) => {
-            state[payload.id] = payload.item;
+        select: ({ group }, {payload}: PayloadAction<LabelGroupAction["select"]>) => {
+            group[payload.id].selected = true;
+        },
+        unselect: ({ group }, { payload }: PayloadAction<LabelGroupAction["unselect"]>) => {
+            group[payload.id].selected = false;
         },
         removeSelectedAll: (state) => {
-            Object.keys(state).map(parseInt).filter(id => state[id].selected).forEach(id => delete state[id]);
+            const { group } = state;
+            Object.keys(group)
+                .map(parseInt)
+                .filter(id => group[id].selected)
+                .forEach(id => state.removeLabel(id));
         },
     }
 });
 
-export const {add, move, modify} = labelGroupSlice.actions;
+export const {setLabel, setSpace, move, select, unselect, removeSelectedAll} = labelGroupSlice.actions;
 
 export const selectLabelGroup = (state: RootState) => state.labelGroup;
 
