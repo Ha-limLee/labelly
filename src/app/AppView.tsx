@@ -1,8 +1,8 @@
 import React from 'react';
 import style from './AppView.module.css';
-import Header from '../features/Header/Header';
-import Toolbar from '../features/Toolbar';
-import LabellingBoard from '../features/LabellingBoard';
+import Header from '../features/header/Header';
+import Toolbar from '../features/toolbar';
+import LabellingBoard from '../features/labellingBoard';
 
 const AppView = () => {
     return (

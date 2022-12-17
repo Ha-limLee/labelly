@@ -1,5 +1,5 @@
 import style from './HeaderView.module.css';
-import HeaderTextArea from '../HeaderTextArea';
+import HeaderTextArea from '../headerTextArea';
 
 const HeaderView = () => {
     return (

@@ -1,6 +1,6 @@
 import style from './ToolbarView.module.css';
-import SelectModeButton from '../SelectModeButton';
-import CreateModeButton from '../CreateModeButton';
+import SelectModeButton from '../selectModeButton';
+import CreateModeButton from '../createModeButton';
 
 const ToolbarView = () => {
     return (

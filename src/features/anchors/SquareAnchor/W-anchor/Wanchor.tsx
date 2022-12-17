@@ -1,10 +1,11 @@
-import { useLabelListDispatch, useLabelListState } from "contexts/LabelListContext";
 import React from "react";
+import { selectLabelGroup } from "features/label/labelGroupSlice";
+import { useAppSelector, useAppDispatch } from "app/hooks";
 import { SquareAnchorWithDrag } from "../common";
 
 const Wanchor = ({id, left, top}: {id: number, left: number, top: number}) => {
-    const labelList = useLabelListState();
-    const labelListDispatch = useLabelListDispatch();
+    const labelList = useAppSelector(selectLabelGroup);
+    const dispatch = useAppDispatch();
     const label = labelList[id];
 
     const onBetween = (e: React.MouseEvent) => {

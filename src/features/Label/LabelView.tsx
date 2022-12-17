@@ -1,9 +1,9 @@
-import LabelPosition from './LabelPosition.type';
 import type { LABEL_MODE } from 'features/mode/modeSlice';
+import type { LabelSpace } from './labelGroupSlice';
 import SelectedLabel from './SelectedLabel';
 import DefaultLabel from './DefaultLabel';
 
-const LabelView = ({id, labelPosition, mode, selected}: {id: number, labelPosition: LabelPosition, mode: LABEL_MODE, selected: boolean}) => {
+const LabelView = ({ id, labelPosition, mode, selected }: { id: number, labelPosition: LabelSpace, mode: LABEL_MODE, selected: boolean }) => {
     return (
         (mode === "SELECT" && selected) ?
         <SelectedLabel id={id} labelPosition={labelPosition}/>

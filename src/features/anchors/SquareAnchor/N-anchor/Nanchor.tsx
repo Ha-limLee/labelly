@@ -1,12 +1,14 @@
-import SelectedLabel from "features/Label/SelectedLabel";
-import { LabelListElement, useLabelListDispatch, useLabelListState } from "contexts/LabelListContext";
+import SelectedLabel from "features/label/SelectedLabel";
+import { selectLabelGroup, setLabel } from "features/label/labelGroupSlice";
+import { useAppSelector, useAppDispatch } from "app/hooks";
+import type { LabelState } from "features/label/labelGroupSlice";
 import React from "react";
 import { SquareAnchorWithDrag } from "../common";
 
 const Nanchor = ({id, left, top}: {id: number, left: number, top: number}) => {
-    const labelList = useLabelListState();
-    const labelListDispatch = useLabelListDispatch();
-    const label = labelList[id];
+    const labelGroup = useAppSelector(selectLabelGroup);
+    const dispatch = useAppDispatch();
+    const label = labelGroup[id];
 
     const onBetween = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -17,12 +19,12 @@ const Nanchor = ({id, left, top}: {id: number, left: number, top: number}) => {
             height: label.height,
             width: label.width
         };
-        const element: LabelListElement = {
+        const item: LabelState = {
             ...label,
             top: label.top + diff
         };
-
-        labelListDispatch({type: 'add', id: id, element: element});
+        
+        dispatch(setLabel({ id, item }));
     };
     
     return SquareAnchorWithDrag({between: onBetween})({left: left, top: top, style: {cursor: 'n-resize'}});

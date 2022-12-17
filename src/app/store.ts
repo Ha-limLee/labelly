@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import labelGroupReducer from '../features/Label/LabelGroupSlice';
+import labelGroupReducer from '../features/label/labelGroupSlice';
 import modeReducer from '../features/mode/modeSlice';
 
 export const store = configureStore({

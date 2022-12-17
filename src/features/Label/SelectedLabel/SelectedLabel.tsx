@@ -1,25 +1,24 @@
 import React from "react";
-import LabelPosition from "../LabelPosition.type";
 import SelectedLabelView from "./SelectedLabelView";
-import { useSelectedIdDispatch } from "contexts/SelectedIdContext";
-import { useLabelListDispatch } from "contexts/LabelListContext";
+import type { LabelSpace } from "../labelGroupSlice";
+import { useAppDispatch } from "app/hooks";
+import { unselect, move } from "../labelGroupSlice";
 
-const SelectedLabel = ({id, labelPosition}: {id: number, labelPosition: LabelPosition}) => {
-    const selectedIdDispatch = useSelectedIdDispatch();
+const SelectedLabel = ({ id, labelPosition }: { id: number, labelPosition: LabelSpace }) => {
+    const dispatch = useAppDispatch();
     const [mouseDown, setMouseDown] = React.useState(false);
     const [mouseMove, setMouseMove] = React.useState(false);
     const [pos, setPos] = React.useState({...labelPosition});
     const {left, top} = labelPosition;
     const [mouseBegin, setMouseBegin] = React.useState([left, top]);
     const [mouseUp, setMouseUp] = React.useState(false);
-    const labelListDispatch = useLabelListDispatch();
 
     const onClick = (e: React.MouseEvent) => {
         e.preventDefault();
         if (mouseUp) {
             setMouseUp(false);
         } else if (!mouseMove)
-            selectedIdDispatch({type: 'set', id: id, selected: false});
+            dispatch(unselect({ id }));
     };
 
     const onMouseDown = (e: React.MouseEvent) => {
@@ -42,7 +41,7 @@ const SelectedLabel = ({id, labelPosition}: {id: number, labelPosition: LabelPos
         e.preventDefault();
         e.stopPropagation();
         if (mouseDown && mouseMove) {
-            labelListDispatch({type: 'move', id: id, left: pos.left, top: pos.top});
+            dispatch(move({ id, item: { left: pos.left, top: pos.top } }));
             setMouseDown(false);
             setMouseMove(false);
             setMouseUp(true);

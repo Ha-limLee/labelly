@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type {RootState} from '../../app/store';
-import { useKeyGen } from "features/keyGen";
+import { createKeyGen } from "features/keyGen";
 
 export interface LabelPoint {
     left: number,
@@ -24,7 +24,7 @@ interface LabelGroupState {
 };
 
 function createGroup() {
-    const keyGen = useKeyGen();
+    const keyGen = createKeyGen();
     const group: LabelGroupState = {};
     return {
         group,
@@ -38,10 +38,9 @@ function createGroup() {
     };
 }
 
-const initialState = createGroup();
+const initialState: LabelGroupState = {};
 
 interface LabelGroupAction {
-    addLabel: { item: LabelState };
     setLabel: { id: number, item: LabelState };
     setSpace: { id: number, item: LabelSpace };
     move: {id: number, item: LabelPoint};
@@ -50,44 +49,45 @@ interface LabelGroupAction {
     removeSelectedAll: null;
 };
 
+const keyGen = createKeyGen();
+
 export const labelGroupSlice = createSlice({
     name: "labelGroup",
     initialState,
     reducers: {
-        addLabel: (state, { payload }: PayloadAction<LabelGroupAction["addLabel"]>) => {
-            state.addLabel(payload.item);
+        setLabel: (state, { payload }: PayloadAction<LabelGroupAction["setLabel"]>) => {
+            state[payload.id] = payload.item;
         },
-        setLabel: ({ group }, { payload }: PayloadAction<LabelGroupAction["setLabel"]>) => {
-            group[payload.id] = payload.item;
-        },
-        setSpace: ({ group }, { payload }: PayloadAction<LabelGroupAction["setSpace"]>) => {
+        setSpace: (state, { payload }: PayloadAction<LabelGroupAction["setSpace"]>) => {
             const { id, item } = payload;
-            if (group[id]) {
-                group[id] = {
-                    selected: group[id].selected,
+            if (state[id]) {
+                state[id] = {
+                    selected: state[id]?.selected || false,
                     ...item,
                 };
             } else {
-                group[id] = { selected: false, ...item };
+                state[id] = { selected: false, ...item };
             }
         },
-        move: ({group}, {payload}: PayloadAction<LabelGroupAction["move"]>) => { 
+        move: (state, {payload}: PayloadAction<LabelGroupAction["move"]>) => { 
             const {left, top} = payload.item;
-            const curr = group[payload.id];
-            group[payload.id] = {...curr, left, top};
+            const curr = state[payload.id];
+            state[payload.id] = {...curr, left, top};
         },
-        select: ({ group }, {payload}: PayloadAction<LabelGroupAction["select"]>) => {
-            group[payload.id].selected = true;
+        select: (state, {payload}: PayloadAction<LabelGroupAction["select"]>) => {
+            state[payload.id].selected = true;
         },
-        unselect: ({ group }, { payload }: PayloadAction<LabelGroupAction["unselect"]>) => {
-            group[payload.id].selected = false;
+        unselect: (state, { payload }: PayloadAction<LabelGroupAction["unselect"]>) => {
+            state[payload.id].selected = false;
         },
         removeSelectedAll: (state) => {
-            const { group } = state;
-            Object.keys(group)
-                .map(parseInt)
-                .filter(id => group[id].selected)
-                .forEach(id => state.removeLabel(id));
+            Object.keys(state)
+                .map(x => parseInt(x))
+                .filter(id => state[id].selected)
+                .forEach(id => {
+                    delete state[id];
+                    keyGen.reuse(id);
+                });
         },
     }
 });
@@ -95,5 +95,7 @@ export const labelGroupSlice = createSlice({
 export const {setLabel, setSpace, move, select, unselect, removeSelectedAll} = labelGroupSlice.actions;
 
 export const selectLabelGroup = (state: RootState) => state.labelGroup;
+
+export const selectKeyGen = (state: RootState) => keyGen;
 
 export default labelGroupSlice.reducer;

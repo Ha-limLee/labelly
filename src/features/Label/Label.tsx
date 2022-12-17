@@ -1,9 +1,9 @@
 import LabelView from "./LabelView";
-import { selectLabelGroup } from './LabelGroupSlice';
+import { selectLabelGroup } from './labelGroupSlice';
 import { selectMode } from '../mode/modeSlice';
 import { useAppSelector } from "app/hooks";
 
-const Label = ({id}: {id: number}) => {
+const Label = ({ id }: { id: number }) => {
     const labelGroup = useAppSelector(selectLabelGroup);
     const {selected, ...labelSpace} = labelGroup[id];
     
