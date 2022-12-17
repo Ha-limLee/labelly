@@ -3,7 +3,7 @@ import React from 'react';
 import Label from "features/label";
 import { useAppSelector, useAppDispatch } from "app/hooks";
 import { selectMode } from "features/mode/modeSlice";
-import { selectLabelGroup, setLabel, selectKeyGen } from "features/label/labelGroupSlice";
+import { selectLabelGroup, setLabel, selectKeyGen, remove } from "features/label/labelGroupSlice";
 import { setSpace, removeSelectedAll } from "features/label/labelGroupSlice";
 import type { LabelSpace } from "features/label/labelGroupSlice";
 
@@ -25,6 +25,8 @@ const LabellingBoard = () => {
     const keyGen = useAppSelector(selectKeyGen);
     const [nextId, setNextId] = React.useState(-1);
 
+    const [prevKey, setPrevKey] = React.useState('');
+
     const selectModeEvents = {
         onKeyDown : (e: React.KeyboardEvent) => {
             if (e.key === 'Delete' || e.key === 'Backspace') dispatch(removeSelectedAll());
@@ -41,7 +43,7 @@ const LabellingBoard = () => {
             e.preventDefault();
             if (mouseDown) {
                 if (!mouseDragging) {
-                    setNextId(keyGen.get());
+                    setNextId(keyGen.getNextKey());
                     setMouseDragging(true);
                 }
                 else {
@@ -72,7 +74,15 @@ const LabellingBoard = () => {
             }
             setMouseDown(false);
             setMouseDragging(false);
-        }
+        },
+        onKeyDown: (e: React.KeyboardEvent) => {
+            e.preventDefault();
+            if (e.key === 'Control') setPrevKey(e.key);
+            else if (prevKey === 'Control' && e.key === 'z') {
+                const lastId = keyGen.getLastKey();
+                if (lastId !== undefined) dispatch(remove({id: lastId}));
+            };
+        },
     };
     
     const createEvents = () => {
@@ -80,7 +90,7 @@ const LabellingBoard = () => {
             onMouseDown: (mode === "CREATE") ? createModeEvents.onMouseDown : (e: React.MouseEvent) => { },
             onMouseMove: (mode === "CREATE") ? createModeEvents.onMouseMove : (e: React.MouseEvent) => { },
             onMouseUp: (mode === "CREATE") ? createModeEvents.onMouseUp : (e: React.MouseEvent) => { },
-            onKeyDown: (mode === "CREATE") ? (e: React.KeyboardEvent) => { } : selectModeEvents.onKeyDown,
+            onKeyDown: (mode === "CREATE") ? createModeEvents.onKeyDown : selectModeEvents.onKeyDown,
         };
     };
 
