@@ -1,6 +1,29 @@
 # Labelly - Make Dataset from Your Image!
 ![main](./imgs/main.png)
 
+## WIP: Refactoring
+1. State Management
+Context API + useReducer --> Redux Toolkit
+
+Context API와 useReducer를 함께 사용하면 전역 상태관리를 할 수 있다.
+
+다만 Redux만큼 커뮤니티의 도움을 받기 어렵다.
+
+예를 들어 Session Storage를 함께 사용할 때 Context API는 모두 다 구현해야 하지만
+
+Redux는 redux-persist 라이브러리를 이용할 수 있다.
+
+2. Folder Structure
+Folder by type --> Folder by feature
+
+현재 폴더 구조는 타입 별(reducer 따로 컴포넌트 따로)로 파일들을 묶고 있다.
+
+이런 구조는 처음 개발 속도는 빠르지만 추후 확장이나 유지보수하기가 어렵다.
+
+See also:
+
+[Structure Files as Feature Folders](https://redux.js.org/style-guide/#structure-files-as-feature-folders-with-single-file-logic)
+
 ## What You can do
 1. Draw a label
 ![draw](./imgs/draw.png)
