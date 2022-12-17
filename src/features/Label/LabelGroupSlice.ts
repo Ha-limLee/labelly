@@ -23,21 +23,6 @@ interface LabelGroupState {
     [id: number] : LabelState;
 };
 
-function createGroup() {
-    const keyGen = createKeyGen();
-    const group: LabelGroupState = {};
-    return {
-        group,
-        addLabel: (item: LabelState) => {
-            group[keyGen.get()] = item;
-        },
-        removeLabel: (id: number) => {
-            delete group[id];
-            keyGen.reuse(id);
-        }
-    };
-}
-
 const initialState: LabelGroupState = {};
 
 interface LabelGroupAction {
