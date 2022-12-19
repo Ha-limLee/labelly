@@ -25,8 +25,6 @@ const LabellingBoard = () => {
     const keyGen = useAppSelector(selectKeyGen);
     const [nextId, setNextId] = React.useState(-1);
 
-    const [prevKey, setPrevKey] = React.useState('');
-
     const selectModeEvents = {
         onKeyDown : (e: React.KeyboardEvent) => {
             if (e.key === 'Delete' || e.key === 'Backspace') dispatch(removeSelectedAll());
@@ -41,20 +39,18 @@ const LabellingBoard = () => {
         },
         onMouseMove : (e: React.MouseEvent) => {
             e.preventDefault();
-            if (mouseDown) {
-                if (!mouseDragging) {
-                    setNextId(keyGen.getNextKey());
-                    setMouseDragging(true);
-                }
-                else {
-                    const left = Math.min(e.pageX, begin[0]);
-                    const top = Math.min(e.pageY, begin[1]);
-                    const width = Math.abs(e.pageX - begin[0]);
-                    const height = Math.abs(e.pageY - begin[1]);
-                    
-                    dispatch(setLabel({ id: nextId, item: { selected: false, left, top, width, height } }));
-                }
+            if (!mouseDown) return;
+            if (!mouseDragging) {
+                setNextId(keyGen.getNextKey());
+                setMouseDragging(true);
+                return;
             }
+            const left = Math.min(e.pageX, begin[0]);
+            const top = Math.min(e.pageY, begin[1]);
+            const width = Math.abs(e.pageX - begin[0]);
+            const height = Math.abs(e.pageY - begin[1]);
+            
+            dispatch(setLabel({ id: nextId, item: { selected: false, left, top, width, height } }));
         },
         onMouseUp : (e: React.MouseEvent) => {
             e.preventDefault();
@@ -77,11 +73,11 @@ const LabellingBoard = () => {
         },
         onKeyDown: (e: React.KeyboardEvent) => {
             e.preventDefault();
-            if (e.key === 'Control') setPrevKey(e.key);
-            else if (prevKey === 'Control' && e.key === 'z') {
+            if (e.ctrlKey && e.key === 'z') {
                 const lastId = keyGen.getLastKey();
-                if (lastId !== undefined) dispatch(remove({id: lastId}));
-            };
+                if (lastId !== undefined) dispatch(remove({ id: lastId }));
+                return;
+            }
         },
     };
     
@@ -101,4 +97,4 @@ const LabellingBoard = () => {
     );
 };
 
-export default LabellingBoard;  
+export default LabellingBoard;
