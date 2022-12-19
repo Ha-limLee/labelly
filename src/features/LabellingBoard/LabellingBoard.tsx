@@ -4,7 +4,7 @@ import Label from "features/label";
 import { useAppSelector, useAppDispatch } from "app/hooks";
 import { selectMode } from "features/mode/modeSlice";
 import { selectLabelGroup, setLabel, selectKeyGen, remove } from "features/label/labelGroupSlice";
-import { setSpace, removeSelectedAll } from "features/label/labelGroupSlice";
+import { setSpace, removeSelectedAll, selectAll } from "features/label/labelGroupSlice";
 import type { LabelSpace } from "features/label/labelGroupSlice";
 
 const LabellingBoard = () => {
@@ -27,7 +27,15 @@ const LabellingBoard = () => {
 
     const selectModeEvents = {
         onKeyDown : (e: React.KeyboardEvent) => {
-            if (e.key === 'Delete' || e.key === 'Backspace') dispatch(removeSelectedAll());
+            e.preventDefault();
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                dispatch(removeSelectedAll());
+                return;
+            }
+            if (e.ctrlKey && e.key === 'a') {
+                dispatch(selectAll());
+                return;
+            }
         }
     };
 
