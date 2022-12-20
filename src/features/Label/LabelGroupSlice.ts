@@ -31,6 +31,7 @@ interface LabelGroupAction {
     move: {id: number, item: LabelPoint};
     select: { id: number };
     unselect: { id: number };
+    remove: { id: number };
     removeSelectedAll: null;
 };
 
@@ -62,8 +63,18 @@ export const labelGroupSlice = createSlice({
         select: (state, {payload}: PayloadAction<LabelGroupAction["select"]>) => {
             state[payload.id].selected = true;
         },
+        selectAll: (state) => {
+            Object.keys(state)
+                .map(x => parseInt(x))
+                .forEach(id => (state[id].selected = true));
+        },
         unselect: (state, { payload }: PayloadAction<LabelGroupAction["unselect"]>) => {
             state[payload.id].selected = false;
+        },
+        remove: (state, { payload }: PayloadAction<LabelGroupAction["remove"]>) => {
+            const { id } = payload;
+            delete state[id];
+            keyGen.reuse(id);
         },
         removeSelectedAll: (state) => {
             Object.keys(state)
@@ -77,7 +88,7 @@ export const labelGroupSlice = createSlice({
     }
 });
 
-export const {setLabel, setSpace, move, select, unselect, removeSelectedAll} = labelGroupSlice.actions;
+export const {setLabel, setSpace, move, select, selectAll, unselect, remove, removeSelectedAll} = labelGroupSlice.actions;
 
 export const selectLabelGroup = (state: RootState) => state.labelGroup;
 

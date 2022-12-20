@@ -3,8 +3,8 @@ import React from 'react';
 import Label from "features/label";
 import { useAppSelector, useAppDispatch } from "app/hooks";
 import { selectMode } from "features/mode/modeSlice";
-import { selectLabelGroup, setLabel, selectKeyGen } from "features/label/labelGroupSlice";
-import { setSpace, removeSelectedAll } from "features/label/labelGroupSlice";
+import { selectLabelGroup, setLabel, selectKeyGen, remove } from "features/label/labelGroupSlice";
+import { setSpace, removeSelectedAll, selectAll } from "features/label/labelGroupSlice";
 import type { LabelSpace } from "features/label/labelGroupSlice";
 
 const LabellingBoard = () => {
@@ -27,7 +27,15 @@ const LabellingBoard = () => {
 
     const selectModeEvents = {
         onKeyDown : (e: React.KeyboardEvent) => {
-            if (e.key === 'Delete' || e.key === 'Backspace') dispatch(removeSelectedAll());
+            e.preventDefault();
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                dispatch(removeSelectedAll());
+                return;
+            }
+            if (e.ctrlKey && e.key === 'a') {
+                dispatch(selectAll());
+                return;
+            }
         }
     };
 
@@ -39,20 +47,18 @@ const LabellingBoard = () => {
         },
         onMouseMove : (e: React.MouseEvent) => {
             e.preventDefault();
-            if (mouseDown) {
-                if (!mouseDragging) {
-                    setNextId(keyGen.get());
-                    setMouseDragging(true);
-                }
-                else {
-                    const left = Math.min(e.pageX, begin[0]);
-                    const top = Math.min(e.pageY, begin[1]);
-                    const width = Math.abs(e.pageX - begin[0]);
-                    const height = Math.abs(e.pageY - begin[1]);
-                    
-                    dispatch(setLabel({ id: nextId, item: { selected: false, left, top, width, height } }));
-                }
+            if (!mouseDown) return;
+            if (!mouseDragging) {
+                setNextId(keyGen.getNextKey());
+                setMouseDragging(true);
+                return;
             }
+            const left = Math.min(e.pageX, begin[0]);
+            const top = Math.min(e.pageY, begin[1]);
+            const width = Math.abs(e.pageX - begin[0]);
+            const height = Math.abs(e.pageY - begin[1]);
+            
+            dispatch(setLabel({ id: nextId, item: { selected: false, left, top, width, height } }));
         },
         onMouseUp : (e: React.MouseEvent) => {
             e.preventDefault();
@@ -72,7 +78,15 @@ const LabellingBoard = () => {
             }
             setMouseDown(false);
             setMouseDragging(false);
-        }
+        },
+        onKeyDown: (e: React.KeyboardEvent) => {
+            e.preventDefault();
+            if (e.ctrlKey && e.key === 'z') {
+                const lastId = keyGen.getLastKey();
+                if (lastId !== undefined) dispatch(remove({ id: lastId }));
+                return;
+            }
+        },
     };
     
     const createEvents = () => {
@@ -80,7 +94,7 @@ const LabellingBoard = () => {
             onMouseDown: (mode === "CREATE") ? createModeEvents.onMouseDown : (e: React.MouseEvent) => { },
             onMouseMove: (mode === "CREATE") ? createModeEvents.onMouseMove : (e: React.MouseEvent) => { },
             onMouseUp: (mode === "CREATE") ? createModeEvents.onMouseUp : (e: React.MouseEvent) => { },
-            onKeyDown: (mode === "CREATE") ? (e: React.KeyboardEvent) => { } : selectModeEvents.onKeyDown,
+            onKeyDown: (mode === "CREATE") ? createModeEvents.onKeyDown : selectModeEvents.onKeyDown,
         };
     };
 
@@ -91,4 +105,4 @@ const LabellingBoard = () => {
     );
 };
 
-export default LabellingBoard;  
+export default LabellingBoard;
