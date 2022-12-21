@@ -8,7 +8,6 @@ const SelectedLabel = ({ id, labelPosition }: { id: number, labelPosition: Label
     const dispatch = useAppDispatch();
     const [mouseDown, setMouseDown] = React.useState(false);
     const [mouseMove, setMouseMove] = React.useState(false);
-    const [pos, setPos] = React.useState({...labelPosition});
     const {left, top} = labelPosition;
     const [mouseBegin, setMouseBegin] = React.useState([left, top]);
     const [mouseUp, setMouseUp] = React.useState(false);
@@ -29,19 +28,20 @@ const SelectedLabel = ({ id, labelPosition }: { id: number, labelPosition: Label
 
     const onMouseMove = (e: React.MouseEvent) => {
         e.preventDefault();
-        if (mouseDown) {
-            if (!mouseMove)
-                setMouseMove(true);
-            const diff = [mouseBegin[0] - left, mouseBegin[1] - top];
-            setPos({...pos, left: e.pageX - diff[0], top: e.pageY - diff[1]});
+        if (!mouseDown) return;
+        if (!mouseMove) {
+            setMouseMove(true);
+            return;
         }
+        const diff = [mouseBegin[0] - left, mouseBegin[1] - top];
+        dispatch(move({id, item: {left: e.pageX - diff[0], top: e.pageY - diff[1]}}));
+        setMouseBegin([e.pageX, e.pageY]);
     };
 
     const onMouseUp = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (mouseDown && mouseMove) {
-            dispatch(move({ id, item: { left: pos.left, top: pos.top } }));
             setMouseDown(false);
             setMouseMove(false);
             setMouseUp(true);
@@ -49,7 +49,7 @@ const SelectedLabel = ({ id, labelPosition }: { id: number, labelPosition: Label
     };
 
     return (
-        <SelectedLabelView id={id} labelPosition={pos} onClick={onClick} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}/>
+        <SelectedLabelView id={id} labelPosition={labelPosition} onClick={onClick} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}/>
     );
 };
 

@@ -25,8 +25,11 @@ interface LabelGroupState {
 
 const initialState: LabelGroupState = {};
 
+export type AnchorDirection = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW';
+
 interface LabelGroupAction {
     setLabel: { id: number, item: LabelState };
+    resizeLabel: {id: number, direction: AnchorDirection, item: {left: number, top: number}};
     setSpace: { id: number, item: LabelSpace };
     move: {id: number, item: LabelPoint};
     select: { id: number };
@@ -44,6 +47,23 @@ export const labelGroupSlice = createSlice({
         setLabel: (state, { payload }: PayloadAction<LabelGroupAction["setLabel"]>) => {
             state[payload.id] = payload.item;
         },
+        resizeLabel: (state, {payload}: PayloadAction<LabelGroupAction["resizeLabel"]>) => {
+            const {id, direction, item} = payload;
+            const {selected, ...curr} = state[id];
+            const mapping: {[K in AnchorDirection]: () => LabelSpace} = {
+                "N": () => ({...curr, top: item.top}),
+                "NE": () => ({...curr, top: item.top, width: item.left - curr.left}),
+                "E": () => ({...curr, width: item.left - curr.left}),
+                "SE": () => ({...curr, height: item.top - curr.top, width: item.left - curr.left}),
+                "S": () => ({...curr, height: item.top - curr.top}),
+                "SW": () => ({...curr, height: item.top - curr.top, left: item.left}),
+                "W": () => ({...curr, left: item.left}),
+                "NW": () => ({...curr, top: item.top, left: item.left}),
+            };
+            const selectedFunction = mapping[direction];
+            const space = selectedFunction();
+            state[id] = {selected, ...space};
+        },
         setSpace: (state, { payload }: PayloadAction<LabelGroupAction["setSpace"]>) => {
             const { id, item } = payload;
             if (state[id]) {
@@ -54,6 +74,9 @@ export const labelGroupSlice = createSlice({
             } else {
                 state[id] = { selected: false, ...item };
             }
+        },
+        setAnchor: (state, {payload}) => {
+            const {id, item} = payload;
         },
         move: (state, {payload}: PayloadAction<LabelGroupAction["move"]>) => { 
             const {left, top} = payload.item;
@@ -88,7 +111,7 @@ export const labelGroupSlice = createSlice({
     }
 });
 
-export const {setLabel, setSpace, move, select, selectAll, unselect, remove, removeSelectedAll} = labelGroupSlice.actions;
+export const {setLabel, resizeLabel, setSpace, move, select, selectAll, unselect, remove, removeSelectedAll} = labelGroupSlice.actions;
 
 export const selectLabelGroup = (state: RootState) => state.labelGroup;
 
