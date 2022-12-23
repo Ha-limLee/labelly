@@ -39,8 +39,14 @@ const SquareAnchor = ({id, left, top, direction}: {id: number, left: number, top
         setMouseDown(false);
         setMouseMove(false);
     };
+    const handleMouseOut = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setMouseDown(false);
+        setMouseMove(false);
+    };
     return (
-        <SquareAnchorView left={left} top={top} style={{cursor: cursorMap[direction]}} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}/>
+        <SquareAnchorView left={left} top={top} style={{cursor: cursorMap[direction]}} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut}/>
     );
 };
 
