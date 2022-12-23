@@ -49,16 +49,21 @@ export const labelGroupSlice = createSlice({
         },
         resizeLabel: (state, {payload}: PayloadAction<LabelGroupAction["resizeLabel"]>) => {
             const {id, direction, item} = payload;
-            const {selected, ...curr} = state[id];
+            const {selected, ...prevSpace} = state[id];
+            const width = [item.left - prevSpace.left, prevSpace.width + prevSpace.left - item.left]
+                            .map(x => Math.abs(x)).reduce((prev, curr) => Math.max(prev, curr));
+            const height = [item.top - prevSpace.top, prevSpace.height + prevSpace.top - item.top]
+                            .map(x => Math.abs(x)).reduce((prev, curr) => Math.max(prev, curr));
+            const diagonalSpace = {...prevSpace, width, height};
             const mapping: {[K in AnchorDirection]: () => LabelSpace} = {
-                "N": () => ({...curr, top: item.top}),
-                "NE": () => ({...curr, top: item.top, width: item.left - curr.left}),
-                "E": () => ({...curr, width: item.left - curr.left}),
-                "SE": () => ({...curr, height: item.top - curr.top, width: item.left - curr.left}),
-                "S": () => ({...curr, height: item.top - curr.top}),
-                "SW": () => ({...curr, height: item.top - curr.top, left: item.left}),
-                "W": () => ({...curr, left: item.left}),
-                "NW": () => ({...curr, top: item.top, left: item.left}),
+                "N": () => ({...prevSpace, top: item.top, height}),
+                "NE": () => ({...diagonalSpace, top: item.top}),
+                "E": () => ({...prevSpace, width}),
+                "SE": () => ({...diagonalSpace}),
+                "S": () => ({...prevSpace, height}),
+                "SW": () => ({...diagonalSpace, left: item.left}),
+                "W": () => ({...prevSpace, left: item.left, width}),
+                "NW": () => ({...diagonalSpace, top: item.top, left: item.left}),
             };
             const selectedFunction = mapping[direction];
             const space = selectedFunction();
