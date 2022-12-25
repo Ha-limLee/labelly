@@ -25,8 +25,11 @@ interface LabelGroupState {
 
 const initialState: LabelGroupState = {};
 
+export type AnchorDirection = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW';
+
 interface LabelGroupAction {
     setLabel: { id: number, item: LabelState };
+    resizeLabel: {id: number, direction: AnchorDirection, item: {left: number, top: number}};
     setSpace: { id: number, item: LabelSpace };
     move: {id: number, item: LabelPoint};
     select: { id: number };
@@ -44,6 +47,28 @@ export const labelGroupSlice = createSlice({
         setLabel: (state, { payload }: PayloadAction<LabelGroupAction["setLabel"]>) => {
             state[payload.id] = payload.item;
         },
+        resizeLabel: (state, {payload}: PayloadAction<LabelGroupAction["resizeLabel"]>) => {
+            const {id, direction, item} = payload;
+            const {selected, ...prevSpace} = state[id];
+            const width = [item.left - prevSpace.left, prevSpace.width + prevSpace.left - item.left]
+                            .map(x => Math.abs(x)).reduce((prev, curr) => Math.max(prev, curr));
+            const height = [item.top - prevSpace.top, prevSpace.height + prevSpace.top - item.top]
+                            .map(x => Math.abs(x)).reduce((prev, curr) => Math.max(prev, curr));
+            const diagonalSpace = {...prevSpace, width, height};
+            const mapping: {[K in AnchorDirection]: () => LabelSpace} = {
+                "N": () => ({...prevSpace, top: item.top, height}),
+                "NE": () => ({...diagonalSpace, top: item.top}),
+                "E": () => ({...prevSpace, width}),
+                "SE": () => ({...diagonalSpace}),
+                "S": () => ({...prevSpace, height}),
+                "SW": () => ({...diagonalSpace, left: item.left}),
+                "W": () => ({...prevSpace, left: item.left, width}),
+                "NW": () => ({...diagonalSpace, top: item.top, left: item.left}),
+            };
+            const selectedFunction = mapping[direction];
+            const space = selectedFunction();
+            state[id] = {selected, ...space};
+        },
         setSpace: (state, { payload }: PayloadAction<LabelGroupAction["setSpace"]>) => {
             const { id, item } = payload;
             if (state[id]) {
@@ -51,9 +76,12 @@ export const labelGroupSlice = createSlice({
                     selected: state[id]?.selected || false,
                     ...item,
                 };
-            } else {
-                state[id] = { selected: false, ...item };
+                return;
             }
+            state[id] = { selected: false, ...item };
+        },
+        setAnchor: (state, {payload}) => {
+            const {id, item} = payload;
         },
         move: (state, {payload}: PayloadAction<LabelGroupAction["move"]>) => { 
             const {left, top} = payload.item;
@@ -88,7 +116,7 @@ export const labelGroupSlice = createSlice({
     }
 });
 
-export const {setLabel, setSpace, move, select, selectAll, unselect, remove, removeSelectedAll} = labelGroupSlice.actions;
+export const {setLabel, resizeLabel, setSpace, move, select, selectAll, unselect, remove, removeSelectedAll} = labelGroupSlice.actions;
 
 export const selectLabelGroup = (state: RootState) => state.labelGroup;
 

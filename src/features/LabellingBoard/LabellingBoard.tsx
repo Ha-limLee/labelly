@@ -9,9 +9,11 @@ import type { LabelSpace } from "features/label/labelGroupSlice";
 
 const LabellingBoard = () => {
     const [imgUrl, setImgUrl] = React.useState('');
-    fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
+    React.useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
         .then(res => res.json())
         .then(json => setImgUrl(json[6].url));
+    }, []);
     
     const mode = useAppSelector(selectMode);
     const dispatch = useAppDispatch();
