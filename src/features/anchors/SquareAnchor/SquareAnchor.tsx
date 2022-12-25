@@ -15,38 +15,38 @@ const SquareAnchor = ({id, left, top, direction}: {id: number, left: number, top
         "W": "w-resize",
         "NW": "nw-resize",
     };
+    
     const dispatch = useAppDispatch();
-    const [mouseDown, setMouseDown] = React.useState(false);
-    const [mouseMove, setMouseMove] = React.useState(false);
+
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setMouseDown(true);
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
     };
-    const handleMouseMove = (e: React.MouseEvent) => {
+
+    const handleMouseMove = (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        if (!mouseDown) return;
-        if (!mouseMove) {
-            setMouseMove(true);
-            return;
-        }
         dispatch(resizeLabel({id, direction, item: {left: e.pageX, top: e.pageY}}));
     };
-    const handleMouseUp = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setMouseDown(false);
-        setMouseMove(false);
-    };
+    
     const handleMouseOut = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setMouseDown(false);
-        setMouseMove(false);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
     };
+
+    const handleMouseUp = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+    };
+
     return (
-        <SquareAnchorView left={left} top={top} style={{cursor: cursorMap[direction]}} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut}/>
+        <SquareAnchorView left={left} top={top} style={{cursor: cursorMap[direction]}} onMouseDown={handleMouseDown} onMouseOut={handleMouseOut} />
     );
 };
 
