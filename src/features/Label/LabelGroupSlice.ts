@@ -76,9 +76,9 @@ export const labelGroupSlice = createSlice({
                     selected: state[id]?.selected || false,
                     ...item,
                 };
-            } else {
-                state[id] = { selected: false, ...item };
+                return;
             }
+            state[id] = { selected: false, ...item };
         },
         setAnchor: (state, {payload}) => {
             const {id, item} = payload;
